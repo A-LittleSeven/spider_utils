@@ -53,10 +53,11 @@ class loginJd(object):
         except Exception as  e:
             print("cannot load the captcha")
             print(e)
+        # >>>>>>>>>>>>>>>>>>>>>>>s
         # dump the cookies for spider
         cookies = pickle.dumps(self.brow.get_cookies())
         with open("%s.txt" % int(time.time()), 'wb') as cookjar:
-            cookjar.writelines(cookies)
+            cookjar.write(cookies)
 
 
     def slideBar(self, retries = 3):
@@ -170,6 +171,6 @@ class loginJd(object):
 
 if __name__ == "__main__":
     # test login
-    test = loginJd('none','none')
+    test = loginJd('17673111536','lws2008520285+')
     test.loginChain()
     # loginJd.process_captcha('slider.png')

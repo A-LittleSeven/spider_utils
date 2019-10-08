@@ -44,7 +44,7 @@ import io
 ```python
 class loginJd(object):
     """
-    某东验证码绕过
+    京东验证码绕过
     输入: account(账号), passwd(密码), timeout(没用), args(用于传入浏览器参数)
     """
     def __init__(self, account, passwd, timeout=None, args=None):
