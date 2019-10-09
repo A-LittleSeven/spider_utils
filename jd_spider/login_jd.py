@@ -171,6 +171,6 @@ class loginJd(object):
 
 if __name__ == "__main__":
     # test login
-    test = loginJd('17673111536','lws2008520285+')
+    test = loginJd('account','password')
     test.loginChain()
     # loginJd.process_captcha('slider.png')
