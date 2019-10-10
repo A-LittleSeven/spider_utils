@@ -47,17 +47,16 @@ class login_taobao(object):
         self.brow.find_element_by_xpath('//*[@id="J_Quick2Static"]').click()
         time.sleep(0.9756)
         self.brow.find_element_by_xpath('//*[@id="TPL_username_1"]').send_keys(self.account)
-        time.sleep(0.5536)
+        time.sleep(0.7536)
         self.brow.find_element_by_xpath('//*[@id="TPL_password_1"]').send_keys(self.passwd)
         self.brow.find_element_by_xpath('//*[@id="J_SubmitStatic"]').click()
         # captcha show
         try:
             brow.find_element_by_xpath('//*[@id="nc_1_n1z"]').is_display()
-
         except Exception as e :
             print(e)
             pass
 
 if __name__ == "__main__":
-    test = login_taobao()
+    test = login_taobao('account','passwd')
     test.loginTest()
