@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 import time
-import pyautogui
+import pickle
 
 
 class login_taobao(object):
@@ -13,23 +13,20 @@ class login_taobao(object):
     淘宝爬虫测试  
     目标是获取cookie   
     """
-    def __init__(self, account, passwd, timeout=10, ptn = (920, 530), args=None):
+    def __init__(self, account, passwd, timeout=10):
         """
-        account: 登录账号\n
-        passwd: 登录密码\n
-        timeout: 等待元素加载的时间\n  
-        ptn: 定位滑块的位置，使用鼠标定位\n   
-        distance: 定位滑块的滑动距离\n
+        :account: 登录账号
+
+        :passwd: 登录密码
+
+        :timeout: 等待元素加载的时间
         """
         self.account = account 
         self.passwd = passwd
         self.timeout = timeout
-        # use to adjust position when screen is differet
-        self.X, self.Y = ptn
-        # drag distance set to 280
-        self.distance = 280
         self.options  = Options()
-        # self.chrome_options.add_argument('--headless')
+        self.options.add_argument('--headless')
+        self.options.add_argument('--disable-gpu')
         self.options.add_experimental_option('excludeSwitches', ['enable-automation'])
         self.brow = webdriver.Chrome(chrome_options = self.options)
         self.brow.set_window_size(1600, 900)
@@ -41,22 +38,27 @@ class login_taobao(object):
         用户行为模拟加参数selenium尝试解决
         """
         self.brow.get(self.lgnLink)
-        loginBtn = By.XPATH('//*[@id="J_Quick2Static"]')
-        # wait for element to be clickable
-        WebDriverWait(self.brow, self.timeout, 0.5).until(EC.element_to_be_selected(loginBtn))
-        self.brow.find_element_by_xpath('//*[@id="J_Quick2Static"]').click()
+        # wait for js to Exec
+        time.sleep(10)
+        # inject
+        self.brow.execute_script(open("./myFunc.js").read())
+        print("success !")
+        time.sleep(0.8823)
+        try:
+            self.brow.find_element_by_xpath('//*[@id="J_Quick2Static"]').click()
+        except:
+            pass
+        time.sleep(3)
         time.sleep(0.9756)
         self.brow.find_element_by_xpath('//*[@id="TPL_username_1"]').send_keys(self.account)
         time.sleep(0.7536)
         self.brow.find_element_by_xpath('//*[@id="TPL_password_1"]').send_keys(self.passwd)
+        time.sleep(0.9975)
         self.brow.find_element_by_xpath('//*[@id="J_SubmitStatic"]').click()
-        # captcha show
-        try:
-            brow.find_element_by_xpath('//*[@id="nc_1_n1z"]').is_display()
-        except Exception as e :
-            print(e)
-            pass
+        time.sleep(3)
+        #  dump cookies here >>>>>>>>>>>>>>>>>>>>>>
+        print("yeaaaaah")
 
 if __name__ == "__main__":
-    test = login_taobao('account','passwd')
+    test = login_taobao("", "")
     test.loginTest()
