@@ -13,7 +13,7 @@ import io
 
 class loginJd(object):
     """
-    某东验证码绕过
+    class use to login jd
     """
     def __init__(self, account, passwd, timeout=None, args=None):
         # read the account and the passwd
@@ -62,8 +62,10 @@ class loginJd(object):
 
     def slideBar(self, retries = 3):
         """
-        滑动验证码解决 \n
-        参数: 重试次数 \n
+        solve the slider bar
+        
+        :reties:retry times when cert failed
+        :return:msg for login
         """
         if retries:
             # if there still has captcha, perform
@@ -95,9 +97,10 @@ class loginJd(object):
 
     def _drag_and_drop_by_offset(self, tag_element, offset):
         """
-        创建一个随机操作 \n
-        输入: tag_element(需要拖拽的元素), offset(偏移量) \n
-        输出: None \n
+        makes bot act like a human
+
+        :tag_element:
+        :offset:distance for slider bar run
         """
         def ease_out_expo(x):
             if x == 1:
@@ -122,9 +125,11 @@ class loginJd(object):
 
     def _b64imgdecoder(self, name, imgBuffer):
         """
-        decode网站的验证码图片 \n
-        输入: name(本地图片名称), imgBuffer(加密的验证码流) \n
-        输出: imgBufferDecoder(解密过的文件流) \n
+        decode the captcha into picture
+
+        :name:offer name for saved img
+        :imgBuffer:b64 encoded io streaming for captcha
+        :return:imgBufferDecoder: decoded captcha io streaming
         """
         if not isinstance(imgBuffer, bytes):
             imgBuffer = imgBuffer.encode('utf-8')
@@ -137,10 +142,11 @@ class loginJd(object):
     @staticmethod
     def process_captcha(slider, target):
         """
-        从文件流读取验证码图片与缺块图片并且返回缺块图片的
-        偏移量 \n
-        输入: File流, slider(缺块图片)，target(验证码图片) \n
-        输出: offset(缩放过后的图像偏移量)
+        read captcha from file streaming and count offset
+
+        :slider:file streaming 
+        :target:file streaming
+        :return:offset
         """
         if isinstance(slider, bytes):
             # feed in bytes io
