@@ -2,19 +2,21 @@ import requests
 import logging
 import traceback
 import json
+import time
 from concurrent.futures import ThreadPoolExecutor
 import multiprocessing
 
 
 class Wallpaper(object):
 
-    OBJ_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n={offset}&pid=hp&video={includeVideo}"
+    OBJ_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n={offset}&nc={_time}&pid=hp&video={includeVideo}"
     BASE_URL = "https://cn.bing.com"
     UA = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36 Edg/83.0.478.61'}
 
     def __init__(self, offset=8, includeVideo=1):
         self.offset = offset
         self.includeVideo = includeVideo
+        self.curr_unix_time = int(round(time.time() * 1000))
 
     def __call__(self):
         self.crawl()
@@ -29,7 +31,7 @@ class Wallpaper(object):
     
     def crawl(self):
         try:
-            res = requests.get(self.OBJ_URL.format(offset=self.offset, includeVideo=self.includeVideo), headers=self.UA)
+            res = requests.get(self.OBJ_URL.format(offset=self.offset, includeVideo=self.includeVideo, _time=self.curr_unix_time), headers=self.UA)
             js = json.loads(res.text)  # type: dict
             js_images = js["images"]
             # 多线程抓取
@@ -43,3 +45,4 @@ class Wallpaper(object):
 
 if __name__ == "__main__":
     s = Wallpaper(8, 1)
+    s()
