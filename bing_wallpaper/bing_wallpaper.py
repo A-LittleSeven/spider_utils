@@ -2,6 +2,7 @@ import requests
 import logging
 import traceback
 import json
+import os
 import time
 from concurrent.futures import ThreadPoolExecutor
 import multiprocessing
@@ -17,6 +18,7 @@ class Wallpaper(object):
         self.offset = offset
         self.includeVideo = includeVideo
         self.curr_unix_time = int(round(time.time() * 1000))
+        self.savepath = "./wallpaper"
 
     def __call__(self):
         self.crawl()
@@ -25,7 +27,7 @@ class Wallpaper(object):
         pic_link = self.BASE_URL + item["url"]
         title = item["copyright"].split("(")[0]
         res = requests.get(pic_link, headers=self.UA)
-        with open(title + ".jpg", "wb") as fp:
+        with open(os.path.join(self.savepath, title + ".jpg"), "wb") as fp:
             fp.write(res.content)
         return 'ok'
     
