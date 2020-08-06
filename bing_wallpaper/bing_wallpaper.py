@@ -18,7 +18,7 @@ class Wallpaper(object):
         self.offset = offset
         self.includeVideo = includeVideo
         self.curr_unix_time = int(round(time.time() * 1000))
-        self.savepath = "./wallpaper"
+        self.savepath = os.path.join(os.getcwd(), "wallpaper")
 
     def __call__(self):
         self.crawl()
@@ -32,11 +32,13 @@ class Wallpaper(object):
         return 'ok'
     
     def crawl(self):
+        if not os.path.exists(self.savepath):
+            os.mkdir(self.savepath)
         try:
             res = requests.get(self.OBJ_URL.format(offset=self.offset, includeVideo=self.includeVideo, _time=self.curr_unix_time), headers=self.UA)
             js = json.loads(res.text)  # type: dict
             js_images = js["images"]
-            # 多线程抓取
+            # 多线程
             with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count(), thread_name_prefix="bingWallPaper_") as executor:
                 futures = [executor.submit(self._subcrawl, item)
                            for item in js_images]
